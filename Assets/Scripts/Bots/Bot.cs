@@ -5,6 +5,8 @@ using InControl;
 
 public class Bot : MonoBehaviour
 {
+    public delegate void InstructionAddedDelegate(Queue<Instructions> actions);
+    public InstructionAddedDelegate instructionsAdded;
     public float rotationSpeed = 100f;
     public float movementSpeed = 10f;
     public int displacementUnit = 1;
@@ -37,6 +39,7 @@ public class Bot : MonoBehaviour
         if (instructions.Count <= maxInstructionCount)
         {
             instructions.Enqueue(inst);
+            instructionsAdded(instructions);
         }
     }
 

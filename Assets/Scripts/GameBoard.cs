@@ -1,13 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour {
 
+    public MultiplayerBasicExample.MultiPlayerManager mpManager;
     public GameObject tilePrefab;
-    public Vector2 boardSize;
+    public Vector3 boardSize;
     public int tileSize;
     public List<Bot> bots;
+    GameStates currentState = GameStates.initialization;
+    Queue<Vector3> botPosition = new Queue<Vector3>();
 
     enum GameStates {
         initialization,
@@ -32,19 +34,39 @@ public class GameBoard : MonoBehaviour {
 
     }
 
-    public void InstatiateBots() {
-        Queue<Vector2> botPosition = new Queue<Vector2>();
-        botPosition.Enqueue(new Vector2(0, 0));
-        botPosition.Enqueue(new Vector2(boardSize.x, 0));
-        botPosition.Enqueue(new Vector2(0, boardSize.y));
-        botPosition.Enqueue(new Vector2(boardSize.x, boardSize.y));
+    public void CreateBotPosition() {
+        botPosition.Enqueue(new Vector3(0, 0, 0));
+        botPosition.Enqueue(new Vector3(0, 0, (boardSize.y - 1) * tileSize));
+        botPosition.Enqueue(new Vector3((boardSize.x - 1) * tileSize, 0, 0));
+        botPosition.Enqueue(new Vector3((boardSize.x - 1) * tileSize, 0, (boardSize.y - 1) * tileSize));
+    }
 
+    public Vector3 GetPosition() {
+        return botPosition.Dequeue();
     }
 
 	void Start () {
         bots = new List<Bot>();
         CreateBaseBoard();
-        InstatiateBots();
+        CreateBotPosition();
+        currentState = GameStates.input;
     }
-	
+
+    private void Update()
+    {
+        switch (currentState) {
+            case GameStates.initialization:
+                break;
+            case GameStates.input:
+                mpManager.CheckForControllers();
+                break;
+            case GameStates.movement:
+                break;
+            case GameStates.boardActions:
+                break;
+            default:
+                break;
+        }
+    }
+
 }

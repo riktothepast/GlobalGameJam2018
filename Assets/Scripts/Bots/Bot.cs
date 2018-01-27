@@ -18,13 +18,6 @@ public class Bot : MonoBehaviour
     private void Awake()
     {
         instructions = new Queue<Instructions>();
-        AddInstruction(Instructions.left);
-        AddInstruction(Instructions.forward);
-        AddInstruction(Instructions.left);
-        AddInstruction(Instructions.forward);
-        AddInstruction(Instructions.right);
-        AddInstruction(Instructions.forward);
-        AddInstruction(Instructions.backwards);
     }
 
     private void Update() // just for test, the game manager will manage these insts.

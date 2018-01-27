@@ -31,6 +31,8 @@
     public class MultiPlayerManager : MonoBehaviour
     {
         public GameObject playerPrefab;
+        public delegate void ConnectedPlayerDelegate(int numberOfPlayers);
+        public ConnectedPlayerDelegate connectedPlayers;
         const int maxPlayers = 4;
         [HideInInspector]
         public List<Bot> players = new List<Bot>(maxPlayers);
@@ -102,7 +104,10 @@
                 player.SetGameBoard(gameBoard);
                 player.Device = inputDevice;
                 players.Add(player);
-
+                if (connectedPlayers != null)
+                {
+                    connectedPlayers(players.Count);
+                }
                 return player;
             }
 

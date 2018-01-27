@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 33456193287403486}
   - component: {fileID: 65512282266683946}
   - component: {fileID: 23594225429471826}
+  - component: {fileID: 65673444565144362}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -40,7 +41,7 @@ GameObject:
   - component: {fileID: 114095861101272682}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -210,6 +211,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &65673444565144362
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1039578242458626}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114095861101272682
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -223,5 +236,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotationSpeed: 100
   movementSpeed: 10
-  displacementUnit: 1
+  displacementUnit: 2
   maxInstructionCount: 4

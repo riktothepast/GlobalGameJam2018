@@ -14,10 +14,20 @@ public class Bot : MonoBehaviour
     [SerializeField]
     public Queue<Instructions> instructions;
     bool busy;
+    GameBoard gameBoard;
 
     private void Awake()
     {
         instructions = new Queue<Instructions>();
+        AddInstruction(Instructions.forward);
+        AddInstruction(Instructions.left);
+        AddInstruction(Instructions.left);
+        AddInstruction(Instructions.left);
+        AddInstruction(Instructions.left);
+    }
+
+    public void SetGameBoard(GameBoard board) {
+        gameBoard = board;
     }
 
     private void Update() // just for test, the game manager will manage these insts.
@@ -62,22 +72,35 @@ public class Bot : MonoBehaviour
         }
     }
 
+    bool TargetPositionInsideGameBoard(Vector3 position, Vector3 units) {
+        Vector2 target = new Vector2(position.x, position.z);
+        target.x = target.x / gameBoard.tileSize + units.x;
+        target.y = target.y / gameBoard.tileSize + units.z;
+        if (target.x > -1 && target.x < gameBoard.boardSize.x 
+            && target.y > -1 && target.y < gameBoard.boardSize.y) {
+            return true;
+        }
+        return false;
+    }
+
     IEnumerator Move(float angle, float units)
     {
         busy = true;
         Vector3 desiredRotation = transform.rotation.eulerAngles;
         desiredRotation.y += angle;
-        while (transform.rotation.eulerAngles != desiredRotation)
+        while (transform.rotation != Quaternion.Euler(desiredRotation))
         {
             transform.rotation = Quaternion.Euler(Vector3.MoveTowards(transform.rotation.eulerAngles, desiredRotation, Time.deltaTime * rotationSpeed));
             yield return null;
         }
-        yield return null;
         Vector3 desiredDestination = transform.position + transform.forward * units;
-        while (transform.position != desiredDestination)
+        if (TargetPositionInsideGameBoard(transform.position, transform.forward))
         {
-            transform.position = Vector3.MoveTowards(transform.position, desiredDestination, Time.deltaTime * movementSpeed);
-            yield return null;
+            while (transform.position != desiredDestination)
+            {
+                transform.position = Vector3.MoveTowards(transform.position, desiredDestination, Time.deltaTime * movementSpeed);
+                yield return null;
+            }
         }
         busy = false;
     }

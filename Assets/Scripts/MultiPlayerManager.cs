@@ -98,8 +98,8 @@
             if (players.Count < maxPlayers)
             {
                 Vector3 playerPosition = gameBoard.GetPosition();
-                var gameObject = (GameObject)Instantiate(playerPrefab, playerPosition, Quaternion.identity);
-                var player = gameObject.GetComponent<Bot>();
+                Bot player = Instantiate(playerPrefab, playerPosition, Quaternion.identity).GetComponent<Bot>();
+                player.SetGameBoard(gameBoard);
                 player.Device = inputDevice;
                 players.Add(player);
 

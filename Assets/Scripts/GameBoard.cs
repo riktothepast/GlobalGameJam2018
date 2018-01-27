@@ -49,16 +49,16 @@ public class GameBoard : MonoBehaviour {
         bots = new List<Bot>();
         CreateBaseBoard();
         CreateBotPosition();
-        currentState = GameStates.input;
+        currentState = GameStates.initialization;
     }
 
     private void Update()
     {
         switch (currentState) {
             case GameStates.initialization:
+                mpManager.CheckForControllers();
                 break;
             case GameStates.input:
-                mpManager.CheckForControllers();
                 break;
             case GameStates.movement:
                 break;

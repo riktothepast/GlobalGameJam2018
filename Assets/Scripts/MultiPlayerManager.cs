@@ -4,34 +4,11 @@
     using InControl;
     using UnityEngine;
 
-
-    // This example roughly illustrates the proper way to add multiple players from existing
-    // devices. Notice how InputManager.Devices is not used and no index into it is taken.
-    // Rather a device references are stored in each player and we use InputManager.OnDeviceDetached
-    // to know when one is detached.
-    //
-    // InputManager.Devices should be considered a pool from which devices may be chosen,
-    // not a player list. It could contain non-responsive or unsupported controllers, or there could
-    // be more connected controllers than your game supports, so that isn't a good strategy.
-    //
-    // To detect a joining player, we just check the current active device (which is the last
-    // device to provide input) for a relevant button press, check that it isn't already assigned
-    // to a player, and then create a new player with it.
-    //
-    // NOTE: Due to how Unity handles joysticks, disconnecting a single device will currently cause
-    // all devices to detach, and the remaining ones to reattach. There is no reliable workaround
-    // for this issue. As a result, a disconnecting controller essentially resets this example.
-    // In a more real world scenario, we might keep the players around and throw up some UI to let
-    // users activate controllers and pick their players again before resuming.
-    //
-    // This example could easily be extended to use bindings. The process would be very similar,
-    // just creating a new instance of your action set subclass per player and assigning the
-    // device to its Device property.
-    //
     public class MultiPlayerManager : MonoBehaviour
     {
         public GameObject playerPrefab;
-        public delegate void ConnectedPlayerDelegate(int numberOfPlayers);
+        public delegate void ConnectedPlayerDelegate(int playerNumber);
+        public UiManagerScript uiManager;
         public ConnectedPlayerDelegate connectedPlayers;
         const int maxPlayers = 4;
         [HideInInspector]
@@ -41,6 +18,7 @@
         void Start()
         {
             InputManager.OnDeviceDetached += OnDeviceDetached;
+            connectedPlayers += uiManager.receiveCreatedPlayer;
         }
 
 
@@ -103,10 +81,12 @@
                 Bot player = Instantiate(playerPrefab, playerPosition, Quaternion.identity).GetComponent<Bot>();
                 player.SetGameBoard(gameBoard);
                 player.Device = inputDevice;
+                player.playerNumber = players.Count - 1;
+                player.SetUIManager(uiManager);
                 players.Add(player);
                 if (connectedPlayers != null)
                 {
-                    connectedPlayers(players.Count);
+                    connectedPlayers(players.Count - 1);
                 }
                 return player;
             }
@@ -122,19 +102,19 @@
             Destroy(player.gameObject);
         }
 
-        void OnGUI()
-        {
-            const float h = 22.0f;
-            var y = 10.0f;
+        //void OnGUI()
+        //{
+        //    const float h = 22.0f;
+        //    var y = 10.0f;
 
-            GUI.Label(new Rect(10, y, 300, y + h), "Active players: " + players.Count + "/" + maxPlayers);
-            y += h;
+        //    GUI.Label(new Rect(10, y, 300, y + h), "Active players: " + players.Count + "/" + maxPlayers);
+        //    y += h;
 
-            if (players.Count < maxPlayers)
-            {
-                GUI.Label(new Rect(10, y, 300, y + h), "Press a button to join!");
-                y += h;
-            }
-        }
+        //    if (players.Count < maxPlayers)
+        //    {
+        //        GUI.Label(new Rect(10, y, 300, y + h), "Press a button to join!");
+        //        y += h;
+        //    }
+        //}
     }
 }

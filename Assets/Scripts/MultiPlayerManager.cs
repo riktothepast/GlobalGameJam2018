@@ -33,20 +33,10 @@
         public GameObject playerPrefab;
         public delegate void ConnectedPlayerDelegate(int numberOfPlayers);
         public ConnectedPlayerDelegate connectedPlayers;
-
         const int maxPlayers = 4;
-
-        public List<Vector3> playerPositions = new List<Vector3>() {
-            new Vector3( -1, 1, -10 ),
-            new Vector3( 1, 1, -10 ),
-            new Vector3( -1, -1, -10 ),
-            new Vector3( 1, -1, -10 ),
-        };
-
         [HideInInspector]
         public List<Bot> players = new List<Bot>(maxPlayers);
-
-
+        public GameBoard gameBoard;
 
         void Start()
         {
@@ -54,7 +44,7 @@
         }
 
 
-        void Update()
+        public void CheckForControllers()
         {
             var inputDevice = InputManager.ActiveDevice;
 
@@ -105,21 +95,19 @@
             }
         }
 
-
         Bot CreatePlayer(InputDevice inputDevice)
         {
             if (players.Count < maxPlayers)
             {
-                // Pop a position off the list. We'll add it back if the player is removed.
-                var playerPosition = playerPositions[0];
-                playerPositions.RemoveAt(0);
-
-                var gameObject = (GameObject)Instantiate(playerPrefab, playerPosition, Quaternion.identity);
-                var player = gameObject.GetComponent<Bot>();
+                Vector3 playerPosition = gameBoard.GetPosition();
+                Bot player = Instantiate(playerPrefab, playerPosition, Quaternion.identity).GetComponent<Bot>();
+                player.SetGameBoard(gameBoard);
                 player.Device = inputDevice;
                 players.Add(player);
-                connectedPlayers(players.Count);
-
+                if (connectedPlayers != null)
+                {
+                    connectedPlayers(players.Count);
+                }
                 return player;
             }
 
@@ -129,12 +117,10 @@
 
         void RemovePlayer(Bot player)
         {
-            playerPositions.Insert(0, player.transform.position);
             players.Remove(player);
             player.Device = null;
             Destroy(player.gameObject);
         }
-
 
         void OnGUI()
         {

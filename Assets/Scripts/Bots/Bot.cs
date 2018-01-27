@@ -19,6 +19,7 @@ public class Bot : MonoBehaviour {
         instructions.Enqueue(Instructions.forward);
         instructions.Enqueue(Instructions.right);
         instructions.Enqueue(Instructions.forward);
+        instructions.Enqueue(Instructions.backwards);
     }
 
     private void Update() // just for test, the game manager will manage these insts.
@@ -46,6 +47,9 @@ public class Bot : MonoBehaviour {
                 break;
             case Instructions.forward:
                 StartCoroutine(Move(0, displacementUnit));
+                break;
+            case Instructions.backwards:
+                StartCoroutine(Move(180, displacementUnit));
                 break;
             default:
                 break;

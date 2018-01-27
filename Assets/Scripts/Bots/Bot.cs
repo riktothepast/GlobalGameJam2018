@@ -6,6 +6,7 @@ public class Bot : MonoBehaviour {
     public float rotationSpeed = 100f;
     public float movementSpeed = 10f;
     public int displacementUnit = 1;
+    public int maxInstructionCount = 4;
     [SerializeField]
     public Queue<Instructions> instructions;
     bool busy;
@@ -13,13 +14,13 @@ public class Bot : MonoBehaviour {
     private void Awake()
     {
         instructions = new Queue<Instructions>();
-        instructions.Enqueue(Instructions.left);
-        instructions.Enqueue(Instructions.forward);
-        instructions.Enqueue(Instructions.left);
-        instructions.Enqueue(Instructions.forward);
-        instructions.Enqueue(Instructions.right);
-        instructions.Enqueue(Instructions.forward);
-        instructions.Enqueue(Instructions.backwards);
+        AddInstruction(Instructions.left);
+        AddInstruction(Instructions.forward);
+        AddInstruction(Instructions.left);
+        AddInstruction(Instructions.forward);
+        AddInstruction(Instructions.right);
+        AddInstruction(Instructions.forward);
+        AddInstruction(Instructions.backwards);
     }
 
     private void Update() // just for test, the game manager will manage these insts.
@@ -28,7 +29,9 @@ public class Bot : MonoBehaviour {
     }
 
     public void AddInstruction(Instructions inst) {
-        instructions.Enqueue(inst);
+        if (instructions.Count <= maxInstructionCount) {
+            instructions.Enqueue(inst);
+        }
     }
 
     public void DoNextInstruction() {

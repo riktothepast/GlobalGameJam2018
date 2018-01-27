@@ -5,7 +5,7 @@ using InControl;
 
 public class Bot : MonoBehaviour
 {
-    public delegate void InstructionAddedDelegate(Queue<Instructions> actions);
+    public delegate void InstructionAddedDelegate(int botNumber, Queue<Instructions> actions);
     public InstructionAddedDelegate instructionsAdded;
     public float rotationSpeed = 100f;
     public float movementSpeed = 10f;
@@ -13,6 +13,9 @@ public class Bot : MonoBehaviour
     public int maxInstructionCount = 4;
     [HideInInspector]
     public InputDevice Device { get; set; }
+    [HideInInspector]
+    public int playerNumber;
+    UiManagerScript uiManager;
     [SerializeField]
     public Queue<Instructions> instructions;
     bool busy;
@@ -28,8 +31,15 @@ public class Bot : MonoBehaviour
         AddInstruction(Instructions.left);
     }
 
-    public void SetGameBoard(GameBoard board) {
+    public void SetGameBoard(GameBoard board)
+    {
         gameBoard = board;
+    }
+
+    public void SetUIManager(UiManagerScript uiManager)
+    {
+        this.uiManager = uiManager;
+        instructionsAdded += this.uiManager.receiveInstruction;
     }
 
     private void Update() // just for test, the game manager will manage these insts.
@@ -44,7 +54,7 @@ public class Bot : MonoBehaviour
             instructions.Enqueue(inst);
             if (instructionsAdded != null)
             {
-                instructionsAdded(instructions);
+                instructionsAdded(playerNumber, instructions);
             }
         }
     }
@@ -78,12 +88,14 @@ public class Bot : MonoBehaviour
         }
     }
 
-    bool TargetPositionInsideGameBoard(Vector3 position, Vector3 units) {
+    bool TargetPositionInsideGameBoard(Vector3 position, Vector3 units)
+    {
         Vector2 target = new Vector2(position.x, position.z);
         target.x = target.x / gameBoard.tileSize + units.x;
         target.y = target.y / gameBoard.tileSize + units.z;
-        if (target.x > -1 && target.x < gameBoard.boardSize.x 
-            && target.y > -1 && target.y < gameBoard.boardSize.y) {
+        if (target.x > -1 && target.x < gameBoard.boardSize.x
+            && target.y > -1 && target.y < gameBoard.boardSize.y)
+        {
             return true;
         }
         return false;

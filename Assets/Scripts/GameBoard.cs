@@ -143,7 +143,7 @@ public class GameBoard : MonoBehaviour
 
     IEnumerator HazardCheck()
     {
-        for (int i = mpManager.players.Count - 1; i >= 0; i++)
+        for (int i = mpManager.players.Count - 1; i >= 0; i--)
         {
             foreach (Transform trap in traps)
             {

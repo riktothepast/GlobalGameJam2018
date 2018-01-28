@@ -8,6 +8,7 @@ public class UiManagerScript : MonoBehaviour {
 	public List<UiPanelScript> uiPanels;
 	public List<GameObject> uiPanelsPlaceholder;
 	private int maxPlayers;
+	private int numPlayers;
 
 	void Start () {
 		if (uiPanels.Count != uiPanelsPlaceholder.Count) {
@@ -15,6 +16,7 @@ public class UiManagerScript : MonoBehaviour {
 		}
 		maxPlayers = uiPanels.Count;
 		// resetAll ();
+		numPlayers = 0;
 	}
 
 	public void resetAll() {
@@ -28,7 +30,7 @@ public class UiManagerScript : MonoBehaviour {
 	public void receiveCreatedPlayer(int botNumber) {
 		uiPanelsPlaceholder [botNumber].gameObject.SetActive (false);
 		uiPanels [botNumber].gameObject.SetActive (true);
-		uiPanels [botNumber].reset ();
+		// uiPanels [botNumber].reset ();
 
 		// StartCoroutine(this.methodTester());
 	}
@@ -38,8 +40,14 @@ public class UiManagerScript : MonoBehaviour {
 		uiPanels [botNumber].instructionAdded(index, instructions.LastOrDefault());
 	}
 
+	public void gameStart() {
+		for (int deadBot = numPlayers; deadBot < maxPlayers; deadBot++) {
+			uiPanelsPlaceholder [deadBot].gameObject.SetActive (false);
+		}		
+	}
+
 	public void turnStart() {
-		for (int botNumber = 0; botNumber < maxPlayers; botNumber++) {
+		for (int botNumber = 0; botNumber < numPlayers; botNumber++) {
 			uiPanels [botNumber].turnStart ();
 		}
 	}

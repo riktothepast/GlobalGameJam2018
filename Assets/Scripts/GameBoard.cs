@@ -143,13 +143,15 @@ public class GameBoard : MonoBehaviour
 
     IEnumerator HazardCheck()
     {
-        foreach (Bot player in mpManager.players)
+        for (int i = mpManager.players.Count - 1; i >= 0; i++)
         {
             foreach (Transform trap in traps)
             {
-                Vector3 playerPosition = player.transform.position;
+                Transform player = mpManager.players[i].transform;
+                Vector3 playerPosition = player.position;
                 if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon)
                 {
+                    mpManager.players.Remove(player.GetComponent<Bot>());
                     trap.GetComponent<Trap>().DoDamage(player.gameObject);
                 }
             }

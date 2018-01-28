@@ -67,7 +67,8 @@ public class GameBoard : MonoBehaviour
         turnEnded += uiManager.turnEnd;
     }
 
-    void InitializeApplication() {
+    void InitializeApplication()
+    {
         if (mpManager.players.Count >= 1)
         {
             foreach (Bot bot in mpManager.players)
@@ -83,18 +84,22 @@ public class GameBoard : MonoBehaviour
         }
     }
 
-    bool CheckForPlayerInput() {
+    bool CheckForPlayerInput()
+    {
         bool instructionsReady = true;
-        foreach (Bot player in mpManager.players) {
+        foreach (Bot player in mpManager.players)
+        {
             player.CheckInstructionInput();
-            if (player.instructions.Count < player.maxInstructionCount) {
+            if (player.instructions.Count < player.maxInstructionCount)
+            {
                 instructionsReady = false;
             }
         }
         return instructionsReady;
-    } 
+    }
 
-    IEnumerator Initialization() {
+    IEnumerator Initialization()
+    {
         while (currentState == GameStates.initialization)
         {
             mpManager.CheckForControllers();
@@ -103,13 +108,15 @@ public class GameBoard : MonoBehaviour
         }
     }
 
-    IEnumerator InputCheck() {
+    IEnumerator InputCheck()
+    {
         currentState = GameStates.input;
         while (!CheckForPlayerInput())
         {
             yield return null;
         }
         StopAllCoroutines();
+        turnStarted();
         StartCoroutine(Movement(0));
     }
 
@@ -117,18 +124,22 @@ public class GameBoard : MonoBehaviour
     {
         currentState = GameStates.movement;
         mpManager.players[currentIndex].DoNextInstruction();
-        while (mpManager.players[currentIndex].Finished()) {
+        while (mpManager.players[currentIndex].Finished())
+        {
             yield return null;
         }
         if (currentIndex + 1 < mpManager.players.Count)
         {
             StopAllCoroutines();
             StartCoroutine(Movement(currentIndex + 1));
-        } else {
+        }
+        else
+        {
             bool instructionsLeft = false;
             foreach (Bot player in mpManager.players)
             {
-                if (player.HasInstructionsLeft()) {
+                if (player.HasInstructionsLeft())
+                {
                     instructionsLeft = true;
                 }
                 yield return null;
@@ -137,9 +148,12 @@ public class GameBoard : MonoBehaviour
             {
                 StopAllCoroutines();
                 StartCoroutine(Movement(0));
-            } else {
+            }
+            else
+            {
                 StopAllCoroutines();
                 StartCoroutine(InputCheck());
+                turnEnded();
             }
         }
     }

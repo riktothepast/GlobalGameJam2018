@@ -6,7 +6,7 @@
 
     public class MultiPlayerManager : MonoBehaviour
     {
-        public GameObject playerPrefab;
+        public List<GameObject> playerPrefab;
         public delegate void ConnectedPlayerDelegate(int playerNumber);
         public UiManagerScript uiManager;
         public ConnectedPlayerDelegate connectedPlayers;
@@ -78,7 +78,7 @@
             if (players.Count < maxPlayers)
             {
                 Vector3 playerPosition = gameBoard.GetPosition();
-                Bot player = Instantiate(playerPrefab, playerPosition, Quaternion.identity).GetComponent<Bot>();
+                Bot player = Instantiate(playerPrefab[players.Count], playerPosition, Quaternion.identity).GetComponent<Bot>();
                 player.SetGameBoard(gameBoard);
                 player.Device = inputDevice;
                 player.SetUIManager(uiManager);

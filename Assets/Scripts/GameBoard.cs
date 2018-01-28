@@ -47,10 +47,10 @@ public class GameBoard : MonoBehaviour
 
     public void CreateBotPosition()
     {
-        botPosition.Enqueue(new Vector3(0, 0, 0));
         botPosition.Enqueue(new Vector3(0, 0, (boardSize.y - 1) * tileSize));
-        botPosition.Enqueue(new Vector3((boardSize.x - 1) * tileSize, 0, 0));
         botPosition.Enqueue(new Vector3((boardSize.x - 1) * tileSize, 0, (boardSize.y - 1) * tileSize));
+        botPosition.Enqueue(new Vector3(0, 0, 0));
+        botPosition.Enqueue(new Vector3((boardSize.x - 1) * tileSize, 0, 0));
     }
 
     public Vector3 GetPosition()

@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EffectsService : MonoBehaviour {
 
-    public List<BotDefineScriptableObject> botDefines;
-
     public List<AudioSource> botEngineAudioSource;
     public List<ParticleSystem> smoke;
     public ParticleSystem smokeExplosion;
@@ -26,12 +24,17 @@ public class EffectsService : MonoBehaviour {
         botEngineAudioSource = new List<AudioSource>();
         for (int i = 0; i < 4; i++)
         {
-            GameObject botAudioSource = new GameObject();
+            GameObject botAudioSource = new GameObject("Source");
             AudioSource au = botAudioSource.AddComponent<AudioSource>();
+            au.loop = true;
+            au.volume = 0.25f;
+            au.transform.SetParent(transform);
+
             botEngineAudioSource.Add(au);
         }
     }
 
+    [ContextMenu("Play Music")]
     public void PlaceEngine()
     {
         if(placedEngine < botEngineAudioSource.Count)
@@ -52,10 +55,23 @@ public class EffectsService : MonoBehaviour {
         }
     }
 
+    [ContextMenu("Place Smoke")]
+    public void PlaceSmokeSample()
+    {
+        Vector3 vos = new Vector3(20 * placeSmoked, 20, 20);
+        PlaceSmoke(vos);
+    }
+
     public void PlaySmokeExplosion(Vector3 position)
     {
         smokeExplosion.transform.position = position;
         smokeExplosion.Play();
     }
 
+    [ContextMenu("Play Smoke Sample")]
+    public void PlaySmokeExplosionSample()
+    {
+        Vector3 vos = new Vector3(20 * placeSmoked, 20, 20);
+        PlaySmokeExplosion(vos);
+    }
 }

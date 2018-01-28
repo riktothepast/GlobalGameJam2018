@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameBoard : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameBoard : MonoBehaviour
     public int maxNumberOfTraps;
     public Timer timer;
     public int tileSize;
+    [HideInInspector]
+    public int disabledPlayers;
     GameStates currentState = GameStates.initialization;
     public delegate void TurnStartedDelegate();
     public delegate void TurnEndedDelegate();
@@ -92,6 +95,7 @@ public class GameBoard : MonoBehaviour
 
     void Start()
     {
+        disabledPlayers = 0;
         CreateBaseBoard();
         CreateBotPosition();
         AddHazards();
@@ -119,6 +123,22 @@ public class GameBoard : MonoBehaviour
 
     bool CheckForPlayerInput()
     {
+        if (disabledPlayers == 3)
+        {
+            foreach (Bot player in mpManager.players)
+            {
+                if (!player.IsDisabled())
+                {
+                    PlayerPrefs.SetInt("Winner", player.playerNumber);
+                    //SceneManager.LoadScene("creditos");
+                }
+            }
+        }
+        else if (disabledPlayers == 4)
+        {
+            PlayerPrefs.SetInt("Winner", -1);
+            //SceneManager.LoadScene("creditos");
+        }
         bool instructionsReady = true;
         foreach (Bot player in mpManager.players)
         {
@@ -148,16 +168,17 @@ public class GameBoard : MonoBehaviour
             foreach (Transform trap in traps)
             {
                 Transform player = mpManager.players[i].transform;
-				bool isBotDisabled = player.GetComponent<Bot> ().IsDisabled();
+                bool isBotDisabled = player.GetComponent<Bot>().IsDisabled();
 
-				if (!isBotDisabled) {
-					Vector3 playerPosition = player.position;
-					if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon && !isBotDisabled)
-					{
-						trap.GetComponent<Trap>().DoDamage(player.gameObject);
-						break;
-					}
-				}
+                if (!isBotDisabled)
+                {
+                    Vector3 playerPosition = player.position;
+                    if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon && !isBotDisabled)
+                    {
+                        trap.GetComponent<Trap>().DoDamage(player.gameObject);
+                        break;
+                    }
+                }
             }
             yield return null;
         }

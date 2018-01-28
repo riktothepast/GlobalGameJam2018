@@ -14,17 +14,21 @@ public class UiImageScript : MonoBehaviour {
 	private bool showInstructionAfterOpen = false;
 	private bool openAfterClose = false;
 
-	private Sprite neutral;
-	private Sprite neutralActive;
+	public Sprite neutral;
+	public Sprite neutralActive;
 
 	private int currentGateFrame = 0;
 	private float frameTimer;
 
-	void Start () {
+	void Start() {
+		GetComponent<Image> ().sprite = this.neutral;
 		this.image = GetComponent<Image> ();
-		this.neutral = Resources.Load<Sprite>("Sprites/neutral");
-		this.neutralActive = Resources.Load<Sprite>("Sprites/neutral_active");
-		this.image.sprite = this.neutral;
+	}
+
+	void Awake () {
+		this.image = GetComponent<Image> ();
+		// this.neutral = Resources.Load<Sprite>("Sprites/neutral");
+		// this.neutralActive = Resources.Load<Sprite>("Sprites/neutral_active");
 		currentGateFrame = 0;
 		gateFrameTimeIndex = 0;
 	}

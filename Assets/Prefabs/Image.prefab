@@ -41,16 +41,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b0215e8e9fefe244ba0b5febf74bbd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprites:
-  - {fileID: 21300000, guid: cbb1ad33354d3304fb191f29aab44685, type: 3}
-  - {fileID: 21300000, guid: 70a8d16cc6e4e9d419a2e7b8e946f6fd, type: 3}
-  - {fileID: 21300000, guid: 71e23111c8b890a4eb1554c025bfa77d, type: 3}
-  - {fileID: 21300000, guid: 0d331a55e2914804192c0416178cb571, type: 3}
   gate:
   - {fileID: 21300000, guid: a8f9765996206474cbf2114965150a32, type: 3}
   - {fileID: 21300000, guid: d4fda37a1136bbd43a90d4ca0a26b5ab, type: 3}
   - {fileID: 21300000, guid: 5025579643873264996c68f2c297efd5, type: 3}
   - {fileID: 21300000, guid: 9fe5a55e8b89ca94b9e7a4ff378e2981, type: 3}
+  neutral: {fileID: 21300000, guid: cbb1ad33354d3304fb191f29aab44685, type: 3}
+  neutralActive: {fileID: 21300000, guid: 70a8d16cc6e4e9d419a2e7b8e946f6fd, type: 3}
 --- !u!114 &114494634528679864
 MonoBehaviour:
   m_ObjectHideFlags: 1

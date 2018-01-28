@@ -15,6 +15,8 @@ public class UiPanelScript : MonoBehaviour {
 	}
 
 	public void turnStart() {
+		images [0].neutral = images [0].neutralActive;
+
 		for (int i = 0; i < images.Length; i++) {
 			images [i].openGate (true);
 		}

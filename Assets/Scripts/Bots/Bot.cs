@@ -6,7 +6,9 @@ using InControl;
 public class Bot : MonoBehaviour
 {
     public delegate void InstructionAddedDelegate(int botNumber, Queue<Instructions> actions);
+    public delegate void InstructionExecutedDelegate(int botNuber, int instructionIndex);
     public InstructionAddedDelegate instructionsAdded;
+    public InstructionExecutedDelegate instructionExecuted;
     public float rotationSpeed = 100f;
     public float movementSpeed = 10f;
     public int displacementUnit = 1;
@@ -41,6 +43,7 @@ public class Bot : MonoBehaviour
     {
         this.uiManager = uiManager;
         instructionsAdded += this.uiManager.receiveInstruction;
+        instructionExecuted += this.uiManager.executeInstruction;
     }
 
     public void Disable()
@@ -101,6 +104,7 @@ public class Bot : MonoBehaviour
         if (instructions.Count > 0 && !busy && !disabled)
         {
             busy = true;
+            instructionExecuted(playerNumber, 4 - instructions.Count);
             ExecuteInstruction(instructions.Dequeue());
         }
     }

@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 222536118338538740}
   - component: {fileID: 114494634528679864}
   - component: {fileID: 114947518312832182}
-  - component: {fileID: 114263649298636302}
+  - component: {fileID: 114077226605701870}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -30,7 +30,7 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114263649298636302
+--- !u!114 &114077226605701870
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -38,24 +38,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1721112035632484}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 414c512cad57a7d4ab1d62ef69724df8, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b0215e8e9fefe244ba0b5febf74bbd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sprites:
-  - {fileID: 21300000, guid: 71e23111c8b890a4eb1554c025bfa77d, type: 3}
-  - {fileID: 21300000, guid: 0d331a55e2914804192c0416178cb571, type: 3}
   - {fileID: 21300000, guid: cbb1ad33354d3304fb191f29aab44685, type: 3}
   - {fileID: 21300000, guid: 70a8d16cc6e4e9d419a2e7b8e946f6fd, type: 3}
+  - {fileID: 21300000, guid: 71e23111c8b890a4eb1554c025bfa77d, type: 3}
+  - {fileID: 21300000, guid: 0d331a55e2914804192c0416178cb571, type: 3}
   gate:
-  - {fileID: 21300000, guid: e6cc3e798770c5343b951aeee4dfa19d, type: 3}
-  - {fileID: 21300000, guid: afd8a5400aef7c046af1296c269de318, type: 3}
-  - {fileID: 21300000, guid: 820a955f96ce0fc4ba6a1f250937f144, type: 3}
-  - {fileID: 21300000, guid: c8ad9ee75f9f36f46b6748eb5e2497df, type: 3}
-  - {fileID: 21300000, guid: 202d31ab2bdad424cad8724e4146619c, type: 3}
-  - {fileID: 21300000, guid: 80a8857cc8a554c4abf364ab492d4a9a, type: 3}
-  - {fileID: 21300000, guid: cb247499c7f1c4441872d8dcd5b489ce, type: 3}
-  - {fileID: 21300000, guid: b12dbd6495c4fe74fb558a08cd7e555a, type: 3}
-  - {fileID: 21300000, guid: f58f687f6b3bf11439084509135c3903, type: 3}
+  - {fileID: 21300000, guid: a8f9765996206474cbf2114965150a32, type: 3}
+  - {fileID: 21300000, guid: d4fda37a1136bbd43a90d4ca0a26b5ab, type: 3}
+  - {fileID: 21300000, guid: 5025579643873264996c68f2c297efd5, type: 3}
+  - {fileID: 21300000, guid: 9fe5a55e8b89ca94b9e7a4ff378e2981, type: 3}
 --- !u!114 &114494634528679864
 MonoBehaviour:
   m_ObjectHideFlags: 1

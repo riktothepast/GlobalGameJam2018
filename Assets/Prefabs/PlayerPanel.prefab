@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 114617082983818780}
   - component: {fileID: 114904871794188310}
   m_Layer: 5
-  m_Name: P1Panel
+  m_Name: PlayerPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1630711652480308}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 414c512cad57a7d4ab1d62ef69724df8, type: 3}
+  m_Script: {fileID: 11500000, guid: 8b0215e8e9fefe244ba0b5febf74bbd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sprites:
@@ -429,10 +429,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   images:
-  - {fileID: 114810569490019340}
-  - {fileID: 114711898812982770}
-  - {fileID: 114672393946154650}
-  - {fileID: 114376417879427006}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!114 &114923113314433886
 MonoBehaviour:
   m_ObjectHideFlags: 1

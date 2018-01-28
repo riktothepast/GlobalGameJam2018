@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UiPanelScript : MonoBehaviour {
-	public ImageScript[] images;
+	public UiImageScript[] images;
 
+	/*
 	public void setImage(int index, string spriteName) {
 		images [index].setImage (spriteName);
 	}
+	*/
 		
 	public void toggleGate(int index) {
 		images [index].toggleGate();

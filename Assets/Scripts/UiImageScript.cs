@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class ImageScript : MonoBehaviour {
-
-	public Sprite[] sprites;
+public class UiImageScript : MonoBehaviour {
 	public Sprite[] gate;
 
 	private Image image = null;
@@ -15,29 +13,18 @@ public class ImageScript : MonoBehaviour {
 
 	void Start () {
 		this.image = GetComponent<Image> ();
-		this.image.sprite = sprites[0];
+		this.image.sprite = Resources.Load<Sprite>("Sprites/neutral");
 	}
 
-	public void setImage(string imageName) {
-		int index;
-		switch (imageName) {
-		case "item":
-			index = 0;
-			break;
-		case "item_active":
-			index = 1;
-			break;
-		case "neutral":
-			index = 2;
-			break;
-		case "neutral_active":
-			index = 3;
-			break;
-		default:
-			index = 0;
+	public void setControlImage(string spriteName) {
+		this.image.sprite = Resources.Load<Sprite>("Sprites/" + spriteName); 
+	}
+
+	public void setInstructionImage(Instructions instruction) {
+		switch (instruction) {
+			case Instructions.attack:
 			break;
 		}
-		this.image.sprite = sprites[index];
 	}
 
 	public void toggleGate() {

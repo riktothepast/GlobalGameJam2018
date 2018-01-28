@@ -10,6 +10,8 @@ public class Projectile : MonoBehaviour {
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag.Equals("Player")) {
+            Bot otherBot = other.transform.parent.GetComponent<Bot>();
+            otherBot.effectService.PlaySmokeExplosion(otherBot.transform.position);
             other.transform.parent.GetComponent<Bot>().Disable();
         }
     }

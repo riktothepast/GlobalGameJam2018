@@ -31,7 +31,7 @@ public class EffectsService : MonoBehaviour {
             AudioSource au = botAudioSource.AddComponent<AudioSource>();
             au.playOnAwake = false;
             au.loop = true;
-            au.volume = 0.25f;
+            au.volume = 0.1f;
             au.transform.SetParent(transform);
 
             botEngineAudioSource.Add(au);
@@ -40,6 +40,14 @@ public class EffectsService : MonoBehaviour {
         effectsPlayer.playOnAwake = false;
         effectsPlayer.loop = false;
         effectsPlayer.transform.SetParent(transform);
+    }
+
+    public void UpdateAudioVolumeThreshold(int playerNumbers)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            botEngineAudioSource[i].volume = 0.5f *( (1f / playerNumbers) * 0.5f);
+        }
     }
 
     [ContextMenu("Play Music")]

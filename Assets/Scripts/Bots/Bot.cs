@@ -23,10 +23,13 @@ public class Bot : MonoBehaviour
     GameBoard gameBoard;
     Vector3 lastDir;
     bool disabled;
+    [HideInInspector]
+    public EffectsService effectService;
 
     private void Awake()
     {
         instructions = new Queue<Instructions>();
+
     }
 
     public void SetGameBoard(GameBoard board)
@@ -42,6 +45,8 @@ public class Bot : MonoBehaviour
     }
 
     public void Disable() {
+        effectService.PlaceSmoke(transform.position);
+        effectService.PlayExplosionSound();
         disabled = true;
     }
 
@@ -130,6 +135,7 @@ public class Bot : MonoBehaviour
 
     IEnumerator Move(Vector3 dir, float units)
     {
+        effectService.PlayMoveSound();
         Vector3 desiredRotation = transform.GetChild(0).rotation.eulerAngles;
         if (Vector3.Distance(dir, Vector3.forward) < 0.1f)
         {
@@ -185,5 +191,10 @@ public class Bot : MonoBehaviour
 
     public bool HasInstructionsLeft() {
         return instructions.Count > 0 ? true : false;
+    }
+
+    public void StartEngine()
+    {
+        effectService.PlaceEngine();
     }
 }

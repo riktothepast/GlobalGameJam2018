@@ -14,6 +14,7 @@
         [HideInInspector]
         public List<Bot> players = new List<Bot>(maxPlayers);
         public GameBoard gameBoard;
+        public EffectsService effectServices;
 
         void Start()
         {
@@ -82,8 +83,11 @@
                 player.SetGameBoard(gameBoard);
                 player.Device = inputDevice;
                 player.SetUIManager(uiManager);
+                player.effectService = effectServices;
+                player.StartEngine();
                 players.Add(player);
                 player.playerNumber = players.Count - 1;
+                effectServices.UpdateAudioVolumeThreshold(players.Count);
                 if (connectedPlayers != null)
                 {
                     connectedPlayers(players.Count - 1);

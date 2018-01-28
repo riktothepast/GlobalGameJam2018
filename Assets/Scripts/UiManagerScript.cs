@@ -30,7 +30,7 @@ public class UiManagerScript : MonoBehaviour {
 		uiPanels [botNumber].gameObject.SetActive (true);
 		uiPanels [botNumber].reset ();
 
-		StartCoroutine(this.methodTester());
+		// StartCoroutine(this.methodTester());
 	}
 
 	public void receiveInstruction(int botNumber, Queue<Instructions> instructions) {

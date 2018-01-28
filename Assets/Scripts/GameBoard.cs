@@ -130,6 +130,7 @@ public class GameBoard : MonoBehaviour
                 if (!player.IsDisabled())
                 {
                     PlayerPrefs.SetInt("Winner", player.playerNumber);
+                    StopAllCoroutines();
                     //SceneManager.LoadScene("creditos");
                 }
             }

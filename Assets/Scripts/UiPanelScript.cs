@@ -15,6 +15,7 @@ public class UiPanelScript : MonoBehaviour {
 	}
 
 	public void turnStart() {
+		Debug.Log ("turnStart");
 		for (int i = 0; i < images.Length; i++) {
 			images [i].openGate (true);
 		}
@@ -22,6 +23,9 @@ public class UiPanelScript : MonoBehaviour {
 
 	public void instructionExecute(int index) {
 		images [index].setInstructionImage(true);
+		if (index > 0) {
+			images [index - 1].setInstructionImage (false);
+		}
 	}
 
 	public void turnEnd() {

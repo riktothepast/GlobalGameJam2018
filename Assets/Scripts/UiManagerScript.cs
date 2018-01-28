@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class UiManagerScript : MonoBehaviour {
 
@@ -28,12 +29,13 @@ public class UiManagerScript : MonoBehaviour {
 		uiPanelsPlaceholder [botNumber].gameObject.SetActive (false);
 		uiPanels [botNumber].gameObject.SetActive (true);
 		uiPanels [botNumber].reset ();
+
+		StartCoroutine(this.methodTester());
 	}
 
 	public void receiveInstruction(int botNumber, Queue<Instructions> instructions) {
-		Instructions instruction = instructions.Peek ();
 		int index = instructions.Count - 1;
-		uiPanels [botNumber].instructionAdded(index, instruction);
+		uiPanels [botNumber].instructionAdded(index, instructions.LastOrDefault());
 	}
 
 	public void turnStart() {
@@ -50,5 +52,49 @@ public class UiManagerScript : MonoBehaviour {
 
 	public void executeInstruction(int botNumber, int instructionNumber) {
 		uiPanels [botNumber].instructionExecute(instructionNumber);
+	}
+
+	private IEnumerator methodTester() {
+		while (true) {
+			yield return new WaitForSeconds(1);
+			int botNumber = 0;
+			Queue<Instructions> demoInstructions = new Queue<Instructions>();
+
+			demoInstructions.Enqueue(Instructions.left);
+			this.receiveInstruction(0, demoInstructions);
+			yield return new WaitForSeconds(1);
+
+			demoInstructions.Enqueue(Instructions.right);
+			this.receiveInstruction(0, demoInstructions);
+			yield return new WaitForSeconds(1);
+
+			demoInstructions.Enqueue(Instructions.forward);
+			this.receiveInstruction(0, demoInstructions);
+			yield return new WaitForSeconds(1);
+
+			demoInstructions.Enqueue(Instructions.attack);
+			this.receiveInstruction(0, demoInstructions);
+			yield return new WaitForSeconds(1);
+
+			this.turnStart ();
+			yield return new WaitForSeconds(1);
+
+			this.executeInstruction (0, 0);
+			yield return new WaitForSeconds(1);
+
+			this.executeInstruction (0, 1);
+			yield return new WaitForSeconds(1);
+
+			this.executeInstruction (0, 2);
+			yield return new WaitForSeconds(1);
+
+			this.executeInstruction (0, 3);
+			yield return new WaitForSeconds(1);
+
+			this.turnEnd ();
+			yield return new WaitForSeconds(1);
+
+			break;
+		}
 	}
 }

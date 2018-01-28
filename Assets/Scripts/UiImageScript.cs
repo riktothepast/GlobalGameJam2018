@@ -8,8 +8,8 @@ public class UiImageScript : MonoBehaviour {
 	public Sprite[] gate;
 
 	private Image image = null;
-	private bool closing = true;
-	private bool closed = true;
+	private bool closing = false;
+	private bool closed = false;
 	private Instructions instruction;
 	private bool showInstructionAfterOpen = false;
 	private bool openAfterClose = false;
@@ -17,11 +17,16 @@ public class UiImageScript : MonoBehaviour {
 	private Sprite neutral;
 	private Sprite neutralActive;
 
+	private int currentGateFrame = 0;
+	private float frameTimer;
+
 	void Start () {
 		this.image = GetComponent<Image> ();
 		this.neutral = Resources.Load<Sprite>("Sprites/neutral");
 		this.neutralActive = Resources.Load<Sprite>("Sprites/neutral_active");
 		this.image.sprite = this.neutral;
+		currentGateFrame = 0;
+		gateFrameTimeIndex = 0;
 	}
 
 	public void setInstruction(Instructions instruction) {
@@ -37,6 +42,7 @@ public class UiImageScript : MonoBehaviour {
 	}
 
 	public void setInstructionImage(bool glow = false) {
+		Debug.Log ("setInstructionImage: " + this.instruction);
 		string active = glow ? "_active" : "";
 		switch (this.instruction) {
 			case Instructions.attack:
@@ -83,6 +89,7 @@ public class UiImageScript : MonoBehaviour {
 	}
 
 	private void onOpen() {
+		Debug.Log ("onOpen");
 		if (this.showInstructionAfterOpen) {
 			this.setInstructionImage ();
 		} else {
@@ -90,19 +97,34 @@ public class UiImageScript : MonoBehaviour {
 		}
 	}
 
+	private int[] gateFrameTimings = new int[]{2, 1, 3, 1};
+	[System.NonSerialized]
+	private int gateFrameTimeIndex = 0;
+
 	void Update () {
 		if (this.closing) {
-			int index = (int)(Time.timeSinceLevelLoad * 15);
-			index = index % gate.Length;
-			this.image.sprite = gate[!this.closed ? index : ((gate.Length-1) - index)];
-			if (index == (gate.Length-1)) {
-				this.closing = false;
-				this.closed = !this.closed;
-
-				if (this.closed) {
-					this.onClose ();
+			frameTimer += Time.deltaTime;
+			if (frameTimer > 1/60) {
+				frameTimer = 0;
+				if (currentGateFrame < gateFrameTimings.Length && gateFrameTimeIndex > gateFrameTimings [currentGateFrame]) {
+					gateFrameTimeIndex = 0;
+					Debug.Log ("currentGateFrame " + currentGateFrame);
+					if (currentGateFrame == gate.Length - 1) {
+						currentGateFrame = 0;
+						this.closing = false;
+						this.closed = !this.closed;
+						Debug.Log ("this.closed " + this.closed);
+						if (this.closed) {
+							this.onClose ();
+						} else {
+							this.onOpen ();
+						}
+					} else {
+						currentGateFrame += 1;
+						this.image.sprite = gate [!this.closed ? currentGateFrame : ((gate.Length - 1) - currentGateFrame)];
+					}
 				} else {
-					this.onOpen ();
+					gateFrameTimeIndex += 1;								
 				}
 			}
 		}

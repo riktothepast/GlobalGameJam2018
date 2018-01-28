@@ -14,22 +14,48 @@ public class UiImageScript : MonoBehaviour {
 	private bool showInstructionAfterOpen = false;
 	private bool openAfterClose = false;
 
+	private Sprite neutral;
+	private Sprite neutralActive;
+
 	void Start () {
 		this.image = GetComponent<Image> ();
-		this.image.sprite = Resources.Load<Sprite>("Sprites/neutral");
+		this.neutral = Resources.Load<Sprite>("Sprites/neutral");
+		this.neutralActive = Resources.Load<Sprite>("Sprites/neutral_active");
+		this.image.sprite = this.neutral;
 	}
 
 	public void setInstruction(Instructions instruction) {
 		this.instruction = instruction;
 	}
 
-	public void setControlImage(string spriteName) {
-		this.image.sprite = Resources.Load<Sprite>("Sprites/" + spriteName); 
+	public void setControlImage(bool glow = false) {
+		if (glow) {
+			this.image.sprite = this.neutralActive;
+		} else {
+			this.image.sprite = this.neutral;
+		}  
 	}
 
 	public void setInstructionImage(bool glow = false) {
+		string active = glow ? "_active" : "";
 		switch (this.instruction) {
 			case Instructions.attack:
+				this.image.sprite = Resources.Load<Sprite> ("Sprites/Attack" + active);
+			break;
+			case Instructions.backwards:
+				this.image.sprite = Resources.Load<Sprite> ("Sprites/ArrowDown" + active);
+			break;
+			case Instructions.forward:
+				this.image.sprite = Resources.Load<Sprite> ("Sprites/ArrowUp" + active);
+			break;
+			case Instructions.left:
+				this.image.sprite = Resources.Load<Sprite> ("Sprites/ArrowLeft" + active);
+			break;
+			case Instructions.right:
+				this.image.sprite = Resources.Load<Sprite> ("Sprites/ArrowRight" + active);
+			break;
+			default:
+				this.image.sprite = Resources.Load<Sprite> ("Sprites/Error" + active);
 			break;
 		}
 	}
@@ -60,7 +86,7 @@ public class UiImageScript : MonoBehaviour {
 		if (this.showInstructionAfterOpen) {
 			this.setInstructionImage ();
 		} else {
-			this.setControlImage ("neutral");
+			this.setControlImage ();
 		}
 	}
 

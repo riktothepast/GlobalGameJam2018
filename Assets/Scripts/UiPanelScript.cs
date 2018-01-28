@@ -10,7 +10,7 @@ public class UiPanelScript : MonoBehaviour {
 		images [index].closeGate ();
 		images [index].setInstruction (instruction);
 		if (index + 1 < images.Length) {
-			images [index + 1].setControlImage ("neutral_active");
+			images [index + 1].setControlImage (true);
 		}
 	}
 
@@ -32,8 +32,8 @@ public class UiPanelScript : MonoBehaviour {
 
 	public void reset() {
 		for (int i = 1; i < images.Length; i++) {
-			images [i].setControlImage ("neutral");
+			images [i].setControlImage ();
 		}
-		images [0].setControlImage ("neutral_active");
+		images [0].setControlImage (true);
 	}
 }

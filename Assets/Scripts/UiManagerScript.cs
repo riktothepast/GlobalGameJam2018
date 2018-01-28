@@ -13,7 +13,7 @@ public class UiManagerScript : MonoBehaviour {
 			Debug.LogError ("placeHolders must match panels");
 		}
 		maxPlayers = uiPanels.Count;
-		resetAll ();
+		// resetAll ();
 	}
 
 	public void resetAll() {

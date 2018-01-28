@@ -15,7 +15,6 @@ public class UiPanelScript : MonoBehaviour {
 	}
 
 	public void turnStart() {
-		Debug.Log ("turnStart");
 		for (int i = 0; i < images.Length; i++) {
 			images [i].openGate (true);
 		}

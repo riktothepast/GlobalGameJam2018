@@ -661,6 +661,7 @@ MonoBehaviour:
   boardSize: {x: 8, y: 8, z: 0}
   tileSize: 2
   bots: []
+  uiManager: {fileID: 1873253104}
 --- !u!4 &907559726
 Transform:
   m_ObjectHideFlags: 0

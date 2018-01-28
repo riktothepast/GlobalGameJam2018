@@ -81,9 +81,9 @@
                 Bot player = Instantiate(playerPrefab, playerPosition, Quaternion.identity).GetComponent<Bot>();
                 player.SetGameBoard(gameBoard);
                 player.Device = inputDevice;
-                player.playerNumber = players.Count - 1;
                 player.SetUIManager(uiManager);
                 players.Add(player);
+                player.playerNumber = players.Count - 1;
                 if (connectedPlayers != null)
                 {
                     connectedPlayers(players.Count - 1);

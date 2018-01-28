@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameBoard : MonoBehaviour
@@ -7,8 +8,8 @@ public class GameBoard : MonoBehaviour
     public MultiplayerBasicExample.MultiPlayerManager mpManager;
     public GameObject tilePrefab;
     public Vector3 boardSize;
+    public Timer timer;
     public int tileSize;
-    public List<Bot> bots;
     GameStates currentState = GameStates.initialization;
     public delegate void TurnStartedDelegate();
     public delegate void TurnEndedDelegate();
@@ -59,30 +60,97 @@ public class GameBoard : MonoBehaviour
 
     void Start()
     {
-        turnStarted += uiManager.turnStart;
-        turnEnded += uiManager.turnEnd;
-        bots = new List<Bot>();
         CreateBaseBoard();
         CreateBotPosition();
-        currentState = GameStates.initialization;
+        StartCoroutine(Initialization());
+        turnStarted += uiManager.turnStart;
+        turnEnded += uiManager.turnEnd;
     }
 
-    private void Update()
-    {
-        switch (currentState)
+    void InitializeApplication() {
+        if (mpManager.players.Count >= 1)
         {
-            case GameStates.initialization:
-                mpManager.CheckForControllers();
-                break;
-            case GameStates.input:
-                break;
-            case GameStates.movement:
-                break;
-            case GameStates.boardActions:
-                break;
-            default:
-                break;
+            foreach (Bot bot in mpManager.players)
+            {
+                if (bot.Device.CommandWasPressed)
+                {
+                    currentState = GameStates.input;
+                    Debug.Log("Starting game with " + mpManager.players.Count + " players");
+                    StopAllCoroutines();
+                    StartCoroutine(InputCheck());
+                }
+            }
         }
+    }
+
+    bool CheckForPlayerInput() {
+        bool instructionsReady = true;
+        foreach (Bot player in mpManager.players) {
+            player.CheckInstructionInput();
+            if (player.instructions.Count < player.maxInstructionCount) {
+                instructionsReady = false;
+            }
+        }
+        return instructionsReady;
+    } 
+
+    IEnumerator Initialization() {
+        while (currentState == GameStates.initialization)
+        {
+            mpManager.CheckForControllers();
+            InitializeApplication();
+            yield return null;
+        }
+    }
+
+    IEnumerator InputCheck() {
+        currentState = GameStates.input;
+        while (!CheckForPlayerInput())
+        {
+            yield return null;
+        }
+        StopAllCoroutines();
+        StartCoroutine(Movement(0));
+    }
+
+    IEnumerator Movement(int currentIndex)
+    {
+        currentState = GameStates.movement;
+        mpManager.players[currentIndex].DoNextInstruction();
+        while (mpManager.players[currentIndex].Finished()) {
+            yield return null;
+        }
+        if (currentIndex + 1 < mpManager.players.Count)
+        {
+            StopAllCoroutines();
+            StartCoroutine(Movement(currentIndex + 1));
+        } else {
+            bool instructionsLeft = false;
+            foreach (Bot player in mpManager.players)
+            {
+                if (player.HasInstructionsLeft()) {
+                    instructionsLeft = true;
+                }
+                yield return null;
+            }
+            if (instructionsLeft)
+            {
+                StopAllCoroutines();
+                StartCoroutine(Movement(0));
+            } else {
+                StopAllCoroutines();
+                StartCoroutine(InputCheck());
+            }
+        }
+    }
+
+    void OnGUI()
+    {
+        const float h = 22.0f;
+        var y = 80.0f;
+
+        GUI.Label(new Rect(10, y, 300, y + h), "Current game state: " + currentState);
+        y += h;
     }
 
 }

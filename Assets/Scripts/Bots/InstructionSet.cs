@@ -4,5 +4,6 @@
     backwards,
     left,
     right,
-    attack
+    attack,
+    skip
 }

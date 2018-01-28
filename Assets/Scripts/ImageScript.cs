@@ -38,6 +38,7 @@ public class ImageScript : MonoBehaviour {
 			index = 0;
 			break;
 		}
+		this.image.sprite = sprites[index];
 	}
 
 	public void toggleGate() {
@@ -56,7 +57,6 @@ public class ImageScript : MonoBehaviour {
 		if (this.closing) {
 			int index = (int)(Time.timeSinceLevelLoad * 15);
 			index = index % gate.Length;
-			Debug.Log (index);
 			this.image.sprite = gate[!this.closed ? index : ((gate.Length-1) - index)];
 			if (index == (gate.Length-1)) {
 				this.closing = false;

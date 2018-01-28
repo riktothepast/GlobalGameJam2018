@@ -4,7 +4,7 @@ using UnityEngine;
 using System.Linq;
 
 public class UiManagerScript : MonoBehaviour {
-
+	public GameObject startCanvas; 
 	public List<UiPanelScript> uiPanels;
 	public List<GameObject> uiPanelsPlaceholder;
 	private int maxPlayers;
@@ -30,6 +30,7 @@ public class UiManagerScript : MonoBehaviour {
 	public void receiveCreatedPlayer(int botNumber) {
 		uiPanelsPlaceholder [botNumber].gameObject.SetActive (false);
 		uiPanels [botNumber].gameObject.SetActive (true);
+		startCanvas.SetActive (false);
 		// uiPanels [botNumber].reset ();
 
 		// StartCoroutine(this.methodTester());

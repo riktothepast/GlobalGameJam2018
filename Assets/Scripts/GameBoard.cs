@@ -123,7 +123,7 @@ public class GameBoard : MonoBehaviour
         foreach (Bot player in mpManager.players)
         {
             player.CheckInstructionInput();
-            if (player.instructions.Count < player.maxInstructionCount)
+            if (player.instructions.Count < player.maxInstructionCount && !player.IsDisabled())
             {
                 instructionsReady = false;
             }
@@ -190,7 +190,7 @@ public class GameBoard : MonoBehaviour
             bool instructionsLeft = false;
             foreach (Bot player in mpManager.players)
             {
-                if (player.HasInstructionsLeft())
+                if (player.HasInstructionsLeft() && !player.IsDisabled())
                 {
                     instructionsLeft = true;
                 }

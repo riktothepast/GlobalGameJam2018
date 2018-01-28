@@ -7,7 +7,9 @@ public class GameBoard : MonoBehaviour
 
     public MultiplayerBasicExample.MultiPlayerManager mpManager;
     public GameObject tilePrefab;
+    public GameObject trapPrefab;
     public Vector3 boardSize;
+    public int maxNumberOfTraps;
     public Timer timer;
     public int tileSize;
     GameStates currentState = GameStates.initialization;
@@ -18,6 +20,7 @@ public class GameBoard : MonoBehaviour
     public UiManagerScript uiManager;
 
     Queue<Vector3> botPosition = new Queue<Vector3>();
+    List<Transform> traps = new List<Transform>();
 
     enum GameStates
     {
@@ -42,7 +45,36 @@ public class GameBoard : MonoBehaviour
 
     public void AddHazards()
     {
+        int numberOfTraps = Random.Range(2, maxNumberOfTraps + 1);
+        int placedTraps = 0;
+        while (placedTraps <= numberOfTraps)
+        {
+            float xPosition = (int)Random.Range(0, boardSize.x - 1);
+            float yPosition = (int)Random.Range(0, boardSize.y - 1);
+            if (!IsPlayerInThere(xPosition, yPosition))
+            {
+                Vector3 trapPosition = new Vector3(xPosition * tileSize, 0f, yPosition * tileSize);
+                GameObject trap = Instantiate(trapPrefab, trapPosition, Quaternion.identity);
+                traps.Add(trap.transform);
+                placedTraps++;
+            }
+        }
+    }
 
+    private bool IsPlayerInThere(float xPosition, float yPosition)
+    {
+        Vector3 trapPosition = new Vector3(xPosition * tileSize, 0f, yPosition * tileSize);
+        bool foundAPlayerInThatPosition = false;
+        foreach (Vector3 playerPosition in botPosition)
+        {
+            if (Vector3.Distance(trapPosition, playerPosition) < Mathf.Epsilon)
+            {
+                foundAPlayerInThatPosition = true;
+                break;
+            }
+        }
+
+        return foundAPlayerInThatPosition;
     }
 
     public void CreateBotPosition()
@@ -62,6 +94,7 @@ public class GameBoard : MonoBehaviour
     {
         CreateBaseBoard();
         CreateBotPosition();
+        AddHazards();
         StartCoroutine(Initialization());
         turnStarted += uiManager.turnStart;
         turnEnded += uiManager.turnEnd;
@@ -108,6 +141,23 @@ public class GameBoard : MonoBehaviour
         }
     }
 
+    IEnumerator HazardCheck()
+    {
+        foreach (Bot player in mpManager.players)
+        {
+            foreach (Transform trap in traps)
+            {
+                Vector3 playerPosition = player.transform.position;
+                if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon)
+                {
+                    trap.GetComponent<Trap>().DoDamage(player.gameObject);
+                }
+            }
+            yield return null;
+        }
+        StartCoroutine(InputCheck());
+    }
+
     IEnumerator InputCheck()
     {
         currentState = GameStates.input;
@@ -152,7 +202,7 @@ public class GameBoard : MonoBehaviour
             else
             {
                 StopAllCoroutines();
-                StartCoroutine(InputCheck());
+                StartCoroutine(HazardCheck());
                 turnEnded();
             }
         }

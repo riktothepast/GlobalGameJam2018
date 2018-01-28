@@ -18,6 +18,8 @@ public class GameBoard : MonoBehaviour
     GameStates currentState = GameStates.initialization;
     public delegate void TurnStartedDelegate();
     public delegate void TurnEndedDelegate();
+    public delegate void GameStartedDelegate();
+    public GameStartedDelegate gameStarted;
     public TurnEndedDelegate turnStarted;
     public TurnEndedDelegate turnEnded;
     public UiManagerScript uiManager;
@@ -101,6 +103,7 @@ public class GameBoard : MonoBehaviour
         AddHazards();
         StartCoroutine(Initialization());
         turnStarted += uiManager.turnStart;
+        gameStarted += uiManager.gameStart;
         turnEnded += uiManager.turnEnd;
     }
 
@@ -112,6 +115,7 @@ public class GameBoard : MonoBehaviour
             {
                 if (bot.Device.CommandWasPressed)
                 {
+                    gameStarted();
                     currentState = GameStates.input;
                     Debug.Log("Starting game with " + mpManager.players.Count + " players");
                     StopAllCoroutines();

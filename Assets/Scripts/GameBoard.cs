@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameBoard : MonoBehaviour {
+public class GameBoard : MonoBehaviour
+{
 
     public MultiplayerBasicExample.MultiPlayerManager mpManager;
     public GameObject tilePrefab;
@@ -10,16 +11,24 @@ public class GameBoard : MonoBehaviour {
     public Timer timer;
     public int tileSize;
     GameStates currentState = GameStates.initialization;
+    public delegate void TurnStartedDelegate();
+    public delegate void TurnEndedDelegate();
+    public TurnEndedDelegate turnStarted;
+    public TurnEndedDelegate turnEnded;
+    public UiManagerScript uiManager;
+
     Queue<Vector3> botPosition = new Queue<Vector3>();
 
-    enum GameStates {
+    enum GameStates
+    {
         initialization,
         input,
         movement,
         boardActions,
     }
 
-    public void CreateBaseBoard() {
+    public void CreateBaseBoard()
+    {
         for (int x = 0; x < boardSize.x; x += 1)
         {
             for (int y = 0; y < boardSize.y; y += 1)
@@ -31,19 +40,31 @@ public class GameBoard : MonoBehaviour {
         }
     }
 
-    public void AddHazards() {
+    public void AddHazards()
+    {
 
     }
 
-    public void CreateBotPosition() {
+    public void CreateBotPosition()
+    {
         botPosition.Enqueue(new Vector3(0, 0, 0));
         botPosition.Enqueue(new Vector3(0, 0, (boardSize.y - 1) * tileSize));
         botPosition.Enqueue(new Vector3((boardSize.x - 1) * tileSize, 0, 0));
         botPosition.Enqueue(new Vector3((boardSize.x - 1) * tileSize, 0, (boardSize.y - 1) * tileSize));
     }
 
-    public Vector3 GetPosition() {
+    public Vector3 GetPosition()
+    {
         return botPosition.Dequeue();
+    }
+
+    void Start()
+    {
+        CreateBaseBoard();
+        CreateBotPosition();
+        StartCoroutine(Initialization());
+        turnStarted += uiManager.turnStart;
+        turnEnded += uiManager.turnEnd;
     }
 
     void InitializeApplication() {
@@ -60,12 +81,6 @@ public class GameBoard : MonoBehaviour {
                 }
             }
         }
-    }
-
-	void Start () {
-        CreateBaseBoard();
-        CreateBotPosition();
-        StartCoroutine(Initialization());
     }
 
     bool CheckForPlayerInput() {

@@ -5,7 +5,7 @@ using InControl;
 
 public class Bot : MonoBehaviour
 {
-    public delegate void InstructionAddedDelegate(Queue<Instructions> actions);
+    public delegate void InstructionAddedDelegate(int botNumber, Queue<Instructions> actions);
     public InstructionAddedDelegate instructionsAdded;
     public float rotationSpeed = 100f;
     public float movementSpeed = 10f;
@@ -13,6 +13,9 @@ public class Bot : MonoBehaviour
     public int maxInstructionCount = 4;
     [HideInInspector]
     public InputDevice Device { get; set; }
+    [HideInInspector]
+    public int playerNumber;
+    UiManagerScript uiManager;
     [SerializeField]
     public Queue<Instructions> instructions;
     bool busy;
@@ -24,9 +27,16 @@ public class Bot : MonoBehaviour
         instructions = new Queue<Instructions>();
     }
 
-    public void SetGameBoard(GameBoard board) {
+    public void SetGameBoard(GameBoard board)
+    {
         gameBoard = board;
         lastDir = Vector3.forward;
+    }
+
+    public void SetUIManager(UiManagerScript uiManager)
+    {
+        this.uiManager = uiManager;
+        instructionsAdded += this.uiManager.receiveInstruction;
     }
 
     public void CheckInstructionInput() {
@@ -50,12 +60,12 @@ public class Bot : MonoBehaviour
 
     public void AddInstruction(Instructions inst)
     {
-        if (instructions.Count <= maxInstructionCount)
+        if (instructions.Count < maxInstructionCount)
         {
             instructions.Enqueue(inst);
             if (instructionsAdded != null)
             {
-                instructionsAdded(instructions);
+                instructionsAdded(playerNumber, instructions);
             }
         }
     }
@@ -89,6 +99,7 @@ public class Bot : MonoBehaviour
                 break;
         }
     }
+
 
     Vector3 TargetPositionInsideGameBoard(Vector3 target) {
         Vector2 mapSize = new Vector2((gameBoard.boardSize.x - 1) * gameBoard.tileSize, (gameBoard.boardSize.y - 1) * gameBoard.tileSize);

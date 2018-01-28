@@ -11,6 +11,7 @@ public class Bot : MonoBehaviour
     public float movementSpeed = 10f;
     public int displacementUnit = 1;
     public int maxInstructionCount = 4;
+    public GameObject projectile;
     [HideInInspector]
     public InputDevice Device { get; set; }
     [HideInInspector]
@@ -21,6 +22,7 @@ public class Bot : MonoBehaviour
     bool busy;
     GameBoard gameBoard;
     Vector3 lastDir;
+    bool disabled;
 
     private void Awake()
     {
@@ -39,6 +41,10 @@ public class Bot : MonoBehaviour
         instructionsAdded += this.uiManager.receiveInstruction;
     }
 
+    public void Disable() {
+        disabled = true;
+    }
+
     public void CheckInstructionInput() {
         if (Device.DPadRight.WasPressed)
         {
@@ -55,12 +61,20 @@ public class Bot : MonoBehaviour
         if (Device.DPadDown.WasPressed)
         {
             AddInstruction(Instructions.backwards);
+        } else
+        if (Device.Action1.WasReleased)
+        {
+            AddInstruction(Instructions.attack);
+        } else
+        if (Device.Action2.WasReleased)
+        {
+            AddInstruction(Instructions.skip);
         }
     }
 
     public void AddInstruction(Instructions inst)
     {
-        if (instructions.Count < maxInstructionCount)
+        if (instructions.Count < maxInstructionCount && !disabled)
         {
             instructions.Enqueue(inst);
             if (instructionsAdded != null)
@@ -72,7 +86,7 @@ public class Bot : MonoBehaviour
 
     public void DoNextInstruction()
     {
-        if (instructions.Count > 0 && !busy)
+        if (instructions.Count > 0 && !busy && !disabled)
         {
             busy = true;
             ExecuteInstruction(instructions.Dequeue());
@@ -94,6 +108,12 @@ public class Bot : MonoBehaviour
                 break;
             case Instructions.backwards:
                 StartCoroutine(Move(Vector3.back, displacementUnit));
+                break;
+            case Instructions.attack:
+                StartCoroutine(Attack());
+                break;
+            case Instructions.skip:
+                busy = false;
                 break;
             default:
                 break;
@@ -148,8 +168,19 @@ public class Bot : MonoBehaviour
         busy = false;
     }
 
+    IEnumerator Attack()
+    {
+        yield return null;
+        GameObject.Instantiate(projectile, transform.position + transform.GetChild(0).transform.forward * displacementUnit, Quaternion.identity);
+        busy = false;
+    }
+
     public bool Finished() {
         return busy;
+    }
+
+    public bool IsDisabled() {
+        return disabled;
     }
 
     public bool HasInstructionsLeft() {

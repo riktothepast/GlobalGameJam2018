@@ -9,4 +9,8 @@ public class UiPanelScript : MonoBehaviour {
 	public void setImage(int index, string spriteName) {
 		images [index].setImage (spriteName);
 	}
+		
+	public void toggleGate(int index) {
+		images [index].toggleGate();
+	}
 }

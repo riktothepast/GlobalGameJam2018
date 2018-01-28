@@ -13,7 +13,6 @@ public class ImageScript : MonoBehaviour {
 	private bool closing = true;
 	private bool closed = true;
 
-	// Use this for initialization
 	void Start () {
 		this.image = GetComponent<Image> ();
 		this.image.sprite = sprites[0];

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +15,8 @@ public class Credits : MonoBehaviour {
 	public Text winner;
 	private float timer;
 	private float resetTimer;
+    public GameObject referencePoint;
+    public List<GameObject> bots;
 	// Use this for initialization
 	void Start () {
 		showCredits = false;
@@ -25,6 +26,7 @@ public class Credits : MonoBehaviour {
 			int winnerInt = PlayerPrefs.GetInt ("Winner");
 			if (winnerInt >= 0) {
 				winner.text = "Player " + (winnerInt + 1);
+                GameObject.Instantiate(bots[winnerInt], referencePoint.transform, false);
 			} else {
 				winner.text = "Draw";
 			}

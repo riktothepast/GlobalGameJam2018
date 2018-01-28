@@ -121,9 +121,22 @@ public class GameBoard : MonoBehaviour
         }
     }
 
+    int GetDisableCount()
+    {
+        int disableCount = 0;
+        foreach (Bot player in mpManager.players)
+        {
+            if (player.IsDisabled())
+            {
+                disableCount += 1;
+            }
+        }
+        return disableCount;
+    }
+
     bool CheckForPlayerInput()
     {
-        if (disabledPlayers == 3)
+        if (GetDisableCount() == mpManager.players.Count - 1)
         {
             foreach (Bot player in mpManager.players)
             {
@@ -131,14 +144,16 @@ public class GameBoard : MonoBehaviour
                 {
                     PlayerPrefs.SetInt("Winner", player.playerNumber);
                     StopAllCoroutines();
-                    //SceneManager.LoadScene("creditos");
+                    Debug.Log("gano el player " + player.playerNumber);
+                    SceneManager.LoadScene(0);
                 }
             }
         }
-        else if (disabledPlayers == 4)
+        else if (GetDisableCount() == mpManager.players.Count)
         {
             PlayerPrefs.SetInt("Winner", -1);
-            //SceneManager.LoadScene("creditos");
+            Debug.Log("empataron");
+            SceneManager.LoadScene(0);
         }
         bool instructionsReady = true;
         foreach (Bot player in mpManager.players)

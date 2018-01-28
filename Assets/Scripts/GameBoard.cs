@@ -157,7 +157,8 @@ public class GameBoard : MonoBehaviour
         {
             PlayerPrefs.SetInt("Winner", -1);
             Debug.Log("empataron");
-			StartCoroutine (LoadNewScene ());
+            StopAllCoroutines();
+            StartCoroutine(LoadNewScene ());
         }
         bool instructionsReady = true;
         foreach (Bot player in mpManager.players)

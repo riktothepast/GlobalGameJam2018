@@ -4,7 +4,7 @@ public class Projectile : MonoBehaviour {
 
     private void Awake()
     {
-        Invoke("Kill", 0.5f);
+        //Invoke("Kill", 0.5f);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -13,6 +13,7 @@ public class Projectile : MonoBehaviour {
             Bot otherBot = other.transform.parent.GetComponent<Bot>();
             otherBot.effectService.PlaySmokeExplosion(otherBot.transform.position);
             other.transform.parent.GetComponent<Bot>().Disable();
+            Kill();
         }
     }
 

@@ -153,8 +153,9 @@ public class GameBoard : MonoBehaviour
                     trap.GetComponent<Trap>().DoDamage(player.gameObject);
                 }
             }
+            yield return null;
         }
-        yield return null;
+        StartCoroutine(InputCheck());
     }
 
     IEnumerator InputCheck()
@@ -201,7 +202,7 @@ public class GameBoard : MonoBehaviour
             else
             {
                 StopAllCoroutines();
-                StartCoroutine(InputCheck());
+                StartCoroutine(HazardCheck());
                 turnEnded();
             }
         }

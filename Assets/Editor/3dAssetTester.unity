@@ -2374,6 +2374,9 @@ MonoBehaviour:
   placeSmoked: 0
   placedEngine: 0
   engineSound: {fileID: 8300000, guid: c525bcb64a3121d4590126cfdf258afb, type: 3}
+  explosion: {fileID: 8300000, guid: 537e2191c7e14d9418d6d1acf02d7c3e, type: 3}
+  move: {fileID: 8300000, guid: 3e1c300c73f63e2468b79b82dd77dc07, type: 3}
+  effectsPlayer: {fileID: 0}
 --- !u!4 &1446968902
 Transform:
   m_ObjectHideFlags: 0

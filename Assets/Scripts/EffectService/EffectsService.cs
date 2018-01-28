@@ -11,6 +11,9 @@ public class EffectsService : MonoBehaviour {
     public int placedEngine;
 
     public AudioClip engineSound;
+    public AudioClip explosion;
+    public AudioClip move;
+    public AudioSource effectsPlayer;
 
     public void Awake()
     {
@@ -26,12 +29,17 @@ public class EffectsService : MonoBehaviour {
         {
             GameObject botAudioSource = new GameObject("Source");
             AudioSource au = botAudioSource.AddComponent<AudioSource>();
+            au.playOnAwake = false;
             au.loop = true;
             au.volume = 0.25f;
             au.transform.SetParent(transform);
 
             botEngineAudioSource.Add(au);
         }
+        effectsPlayer = new GameObject("Effects Player").AddComponent<AudioSource>();
+        effectsPlayer.playOnAwake = false;
+        effectsPlayer.loop = false;
+        effectsPlayer.transform.SetParent(transform);
     }
 
     [ContextMenu("Play Music")]
@@ -43,6 +51,18 @@ public class EffectsService : MonoBehaviour {
             botEngineAudioSource[placedEngine].Play();
             placedEngine += 1;
         }
+    }
+
+    [ContextMenu("Explode")]
+    public void PlayExplosionSound()
+    {
+        effectsPlayer.PlayOneShot(explosion);
+    }
+
+    [ContextMenu("Move")]
+    public void PlayMoveSound()
+    {
+        effectsPlayer.PlayOneShot(move);
     }
 
     public void PlaceSmoke(Vector3 position)

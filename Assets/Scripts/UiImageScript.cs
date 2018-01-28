@@ -10,21 +10,40 @@ public class UiImageScript : MonoBehaviour {
 	private Image image = null;
 	private bool closing = true;
 	private bool closed = true;
+	private Instructions instruction;
+	private bool showInstructionAfterOpen = false;
+	private bool openAfterClose = false;
 
 	void Start () {
 		this.image = GetComponent<Image> ();
 		this.image.sprite = Resources.Load<Sprite>("Sprites/neutral");
 	}
 
+	public void setInstruction(Instructions instruction) {
+		this.instruction = instruction;
+	}
+
 	public void setControlImage(string spriteName) {
 		this.image.sprite = Resources.Load<Sprite>("Sprites/" + spriteName); 
 	}
 
-	public void setInstructionImage(Instructions instruction) {
-		switch (instruction) {
+	public void setInstructionImage(bool glow = false) {
+		switch (this.instruction) {
 			case Instructions.attack:
 			break;
 		}
+	}
+
+	public void closeGate(bool openAfterClose = false) {
+		this.closed = false;
+		this.closing = true;
+		this.openAfterClose = openAfterClose;
+	}
+
+	public void openGate(bool showInstructionAfterOpen = false) {
+		this.closed = true;
+		this.closing = true;
+		this.showInstructionAfterOpen = showInstructionAfterOpen;
 	}
 
 	public void toggleGate() {
@@ -32,11 +51,17 @@ public class UiImageScript : MonoBehaviour {
 	}
 
 	private void onClose() {
-		Debug.Log ("onClose()");
+		if (this.openAfterClose) {
+			this.openGate ();
+		}
 	}
 
 	private void onOpen() {
-		Debug.Log ("onOpen()");
+		if (this.showInstructionAfterOpen) {
+			this.setInstructionImage ();
+		} else {
+			this.setControlImage ("neutral");
+		}
 	}
 
 	void Update () {

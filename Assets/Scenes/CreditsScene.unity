@@ -616,6 +616,7 @@ MonoBehaviour:
   resetTime: 4
   creditsText: {fileID: 1872990731}
   creditsPanel: {fileID: 84474466}
+  winner: {fileID: 2031565942}
 --- !u!1 &1407700793
 GameObject:
   m_ObjectHideFlags: 0

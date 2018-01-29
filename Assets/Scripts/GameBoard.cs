@@ -149,7 +149,7 @@ public class GameBoard : MonoBehaviour
                     PlayerPrefs.SetInt("Winner", player.playerNumber);
                     StopAllCoroutines();
                     Debug.Log("gano el player " + player.playerNumber);
-                    SceneManager.LoadScene(0);
+					StartCoroutine (LoadNewScene ());
                 }
             }
         }
@@ -157,7 +157,7 @@ public class GameBoard : MonoBehaviour
         {
             PlayerPrefs.SetInt("Winner", -1);
             Debug.Log("empataron");
-            SceneManager.LoadScene(0);
+			StartCoroutine (LoadNewScene ());
         }
         bool instructionsReady = true;
         foreach (Bot player in mpManager.players)
@@ -170,6 +170,12 @@ public class GameBoard : MonoBehaviour
         }
         return instructionsReady;
     }
+
+	IEnumerator LoadNewScene(){
+		yield return new WaitForSeconds (2f);
+		SceneManager.LoadScene(1);
+
+	}
 
     IEnumerator Initialization()
     {

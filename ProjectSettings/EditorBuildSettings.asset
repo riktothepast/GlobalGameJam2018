@@ -8,3 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/theAllMightyScene.unity
     guid: 87af46d6685d44a9aba15eb01159647f
+  - enabled: 1
+    path: Assets/Scenes/CreditsScene.unity
+    guid: 5516ae3494e58204389e419555c07a8b

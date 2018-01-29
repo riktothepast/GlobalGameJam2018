@@ -13,6 +13,7 @@ public class Credits : MonoBehaviour {
 	private bool resets;
 
 	public GameObject creditsPanel;
+	public Text winner;
 	private float timer;
 	private float resetTimer;
 	// Use this for initialization
@@ -20,6 +21,16 @@ public class Credits : MonoBehaviour {
 		showCredits = false;
 		timer = 0;
 		resets = false;
+		if (PlayerPrefs.HasKey ("Winner")) {
+			int winnerInt = PlayerPrefs.GetInt ("Winner");
+			if (winnerInt >= 0) {
+				winner.text = "Player " + (winnerInt + 1);
+			} else {
+				winner.text = "Draw";
+			}
+		} else {
+			winner.text = "Draw";
+		}
 	}
 	
 	// Update is called once per frame

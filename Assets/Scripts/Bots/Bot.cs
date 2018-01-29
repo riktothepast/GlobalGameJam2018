@@ -29,7 +29,6 @@ public class Bot : MonoBehaviour
     private void Awake()
     {
         instructions = new Queue<Instructions>();
-
     }
 
     public void SetGameBoard(GameBoard board)
@@ -44,33 +43,41 @@ public class Bot : MonoBehaviour
         instructionsAdded += this.uiManager.receiveInstruction;
     }
 
-    public void Disable() {
+    public void Disable()
+    {
         effectService.PlaceSmoke(transform.position);
         effectService.PlayExplosionSound();
         disabled = true;
+        gameBoard.disabledPlayers++;
     }
 
-    public void CheckInstructionInput() {
+    public void CheckInstructionInput()
+    {
         if (Device.DPadRight.WasPressed)
         {
             AddInstruction(Instructions.right);
-        } else 
+        }
+        else
         if (Device.DPadLeft.WasPressed)
         {
             AddInstruction(Instructions.left);
-        } else 
+        }
+        else
         if (Device.DPadUp.WasPressed)
         {
             AddInstruction(Instructions.forward);
-        } else 
+        }
+        else
         if (Device.DPadDown.WasPressed)
         {
             AddInstruction(Instructions.backwards);
-        } else
+        }
+        else
         if (Device.Action1.WasReleased)
         {
             AddInstruction(Instructions.attack);
-        } else
+        }
+        else
         if (Device.Action2.WasReleased)
         {
             AddInstruction(Instructions.skip);
@@ -126,7 +133,8 @@ public class Bot : MonoBehaviour
     }
 
 
-    Vector3 TargetPositionInsideGameBoard(Vector3 target) {
+    Vector3 TargetPositionInsideGameBoard(Vector3 target)
+    {
         Vector2 mapSize = new Vector2((gameBoard.boardSize.x - 1) * gameBoard.tileSize, (gameBoard.boardSize.y - 1) * gameBoard.tileSize);
         target.x = Mathf.Clamp(target.x, 0, mapSize.x);
         target.z = Mathf.Clamp(target.z, 0, mapSize.y);
@@ -140,13 +148,16 @@ public class Bot : MonoBehaviour
         if (Vector3.Distance(dir, Vector3.forward) < 0.1f)
         {
             desiredRotation.y = 0;
-        } else if (Vector3.Distance(dir, Vector3.back) < 0.1f)
+        }
+        else if (Vector3.Distance(dir, Vector3.back) < 0.1f)
         {
             desiredRotation.y = 180;
-        } else if (Vector3.Distance(dir, Vector3.left) < 0.1f)
+        }
+        else if (Vector3.Distance(dir, Vector3.left) < 0.1f)
         {
             desiredRotation.y = -90;
-        } else if (Vector3.Distance(dir, Vector3.right) < 0.1f)
+        }
+        else if (Vector3.Distance(dir, Vector3.right) < 0.1f)
         {
             desiredRotation.y = 90;
         }
@@ -181,15 +192,18 @@ public class Bot : MonoBehaviour
         busy = false;
     }
 
-    public bool Finished() {
+    public bool Finished()
+    {
         return busy;
     }
 
-    public bool IsDisabled() {
+    public bool IsDisabled()
+    {
         return disabled;
     }
 
-    public bool HasInstructionsLeft() {
+    public bool HasInstructionsLeft()
+    {
         return instructions.Count > 0 ? true : false;
     }
 

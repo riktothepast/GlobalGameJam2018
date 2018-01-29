@@ -11,6 +11,7 @@
         public UiManagerScript uiManager;
         public ConnectedPlayerDelegate connectedPlayers;
         const int maxPlayers = 4;
+        public int disabledPlayers;
         [HideInInspector]
         public List<Bot> players = new List<Bot>(maxPlayers);
         public GameBoard gameBoard;

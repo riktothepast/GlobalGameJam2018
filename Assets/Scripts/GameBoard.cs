@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameBoard : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameBoard : MonoBehaviour
     public int maxNumberOfTraps;
     public Timer timer;
     public int tileSize;
+    [HideInInspector]
+    public int disabledPlayers;
     GameStates currentState = GameStates.initialization;
     public delegate void TurnStartedDelegate();
     public delegate void TurnEndedDelegate();
@@ -92,6 +95,7 @@ public class GameBoard : MonoBehaviour
 
     void Start()
     {
+        disabledPlayers = 0;
         CreateBaseBoard();
         CreateBotPosition();
         AddHazards();
@@ -117,8 +121,40 @@ public class GameBoard : MonoBehaviour
         }
     }
 
+    int GetDisableCount()
+    {
+        int disableCount = 0;
+        foreach (Bot player in mpManager.players)
+        {
+            if (player.IsDisabled())
+            {
+                disableCount += 1;
+            }
+        }
+        return disableCount;
+    }
+
     bool CheckForPlayerInput()
     {
+        if (GetDisableCount() == mpManager.players.Count - 1)
+        {
+            foreach (Bot player in mpManager.players)
+            {
+                if (!player.IsDisabled())
+                {
+                    PlayerPrefs.SetInt("Winner", player.playerNumber);
+                    StopAllCoroutines();
+                    Debug.Log("gano el player " + player.playerNumber);
+                    SceneManager.LoadScene(0);
+                }
+            }
+        }
+        else if (GetDisableCount() == mpManager.players.Count)
+        {
+            PlayerPrefs.SetInt("Winner", -1);
+            Debug.Log("empataron");
+            SceneManager.LoadScene(0);
+        }
         bool instructionsReady = true;
         foreach (Bot player in mpManager.players)
         {
@@ -148,16 +184,17 @@ public class GameBoard : MonoBehaviour
             foreach (Transform trap in traps)
             {
                 Transform player = mpManager.players[i].transform;
-				bool isBotDisabled = player.GetComponent<Bot> ().IsDisabled();
+                bool isBotDisabled = player.GetComponent<Bot>().IsDisabled();
 
-				if (!isBotDisabled) {
-					Vector3 playerPosition = player.position;
-					if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon && !isBotDisabled)
-					{
-						trap.GetComponent<Trap>().DoDamage(player.gameObject);
-						break;
-					}
-				}
+                if (!isBotDisabled)
+                {
+                    Vector3 playerPosition = player.position;
+                    if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon && !isBotDisabled)
+                    {
+                        trap.GetComponent<Trap>().DoDamage(player.gameObject);
+                        break;
+                    }
+                }
             }
             yield return null;
         }

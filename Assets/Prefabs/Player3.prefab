@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 65348645146138198}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1145,7 +1145,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1412735565863086}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
@@ -1194,4 +1194,5 @@ MonoBehaviour:
   movementSpeed: 20
   displacementUnit: 2
   maxInstructionCount: 4
+  projectile: {fileID: 1721103387959790, guid: 75a8a03acfca9ff4cabb14f97541be15, type: 2}
   playerNumber: 0

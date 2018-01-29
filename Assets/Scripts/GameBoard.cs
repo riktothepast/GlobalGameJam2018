@@ -123,7 +123,7 @@ public class GameBoard : MonoBehaviour
         foreach (Bot player in mpManager.players)
         {
             player.CheckInstructionInput();
-            if (player.instructions.Count < player.maxInstructionCount)
+            if (player.instructions.Count < player.maxInstructionCount && !player.IsDisabled())
             {
                 instructionsReady = false;
             }
@@ -143,15 +143,21 @@ public class GameBoard : MonoBehaviour
 
     IEnumerator HazardCheck()
     {
-        foreach (Bot player in mpManager.players)
+        for (int i = mpManager.players.Count - 1; i >= 0; i--)
         {
             foreach (Transform trap in traps)
             {
-                Vector3 playerPosition = player.transform.position;
-                if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon)
-                {
-                    trap.GetComponent<Trap>().DoDamage(player.gameObject);
-                }
+                Transform player = mpManager.players[i].transform;
+				bool isBotDisabled = player.GetComponent<Bot> ().IsDisabled();
+
+				if (!isBotDisabled) {
+					Vector3 playerPosition = player.position;
+					if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon && !isBotDisabled)
+					{
+						trap.GetComponent<Trap>().DoDamage(player.gameObject);
+						break;
+					}
+				}
             }
             yield return null;
         }
@@ -188,7 +194,7 @@ public class GameBoard : MonoBehaviour
             bool instructionsLeft = false;
             foreach (Bot player in mpManager.players)
             {
-                if (player.HasInstructionsLeft())
+                if (player.HasInstructionsLeft() && !player.IsDisabled())
                 {
                     instructionsLeft = true;
                 }

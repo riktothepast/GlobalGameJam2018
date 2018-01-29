@@ -5,6 +5,6 @@ public class Trap : MonoBehaviour
 
     public void DoDamage(GameObject bot)
     {
-        Destroy(bot);
+		bot.GetComponent<Bot> ().Disable ();
     }
 }

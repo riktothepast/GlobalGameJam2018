@@ -148,12 +148,16 @@ public class GameBoard : MonoBehaviour
             foreach (Transform trap in traps)
             {
                 Transform player = mpManager.players[i].transform;
-                Vector3 playerPosition = player.position;
-                if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon)
-                {
-                    mpManager.players.Remove(player.GetComponent<Bot>());
-                    trap.GetComponent<Trap>().DoDamage(player.gameObject);
-                }
+				bool isBotDisabled = player.GetComponent<Bot> ().IsDisabled();
+
+				if (!isBotDisabled) {
+					Vector3 playerPosition = player.position;
+					if (Vector3.Distance(playerPosition, trap.position) < Mathf.Epsilon && !isBotDisabled)
+					{
+						trap.GetComponent<Trap>().DoDamage(player.gameObject);
+						break;
+					}
+				}
             }
             yield return null;
         }

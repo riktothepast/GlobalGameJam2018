@@ -11,6 +11,9 @@ public class UiManagerScript : MonoBehaviour
     private int maxPlayers;
     private int numPlayers;
 
+	public AudioSource mainCore;
+	public AudioSource startCore;
+
     void Start()
     {
         if (uiPanels.Count != uiPanelsPlaceholder.Count)
@@ -38,6 +41,11 @@ public class UiManagerScript : MonoBehaviour
         uiPanels[botNumber].gameObject.SetActive(true);
         startCanvas.SetActive(false);
         // uiPanels [botNumber].reset ();
+		if (numPlayers == 0) {
+			startCore.Stop ();
+			Debug.Log ("Base");
+			mainCore.Play ();
+		}
         numPlayers++;
 
         // StartCoroutine(this.methodTester());
